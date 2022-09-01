@@ -311,16 +311,16 @@ Docker version 20.10.14, build a224086, build f0df350 - версия докер 
 Административный интерфейс Django:   
 http://yandexpracticum.hopto.org/admin
 
-**Учетные данные:**
-http://yandexpracticum.hopto.org/admin/login
-Администратор:
-Логин: admin@admin.ru
-Пароль: adminpass
+**Учетные данные:**.    
+http://yandexpracticum.hopto.org/admin/login  
+Администратор:   
+Логин: admin@admin.ru  
+Пароль: adminpass  
 
-http://yandexpracticum.hopto.org/signin
-Пользователь:
-Логин: user@user.ru
-Пароль: userpass
+http://yandexpracticum.hopto.org/signin 
+Пользователь:  
+Логин: user@user.ru 
+Пароль: userpass 
 
 Документация API Foodgram:  
 http://yandexpracticum.hopto.org/api/docs/redoc.html 
