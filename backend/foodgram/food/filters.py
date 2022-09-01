@@ -55,7 +55,7 @@ class RecipeFilter(filters.FilterSet):
 
         return queryset
 
-    author = filters.NumberFilter(method='get_author')
+    author = filters.CharFilter(method='get_author')
 
     def get_author(self, queryset, name, value):
         if value == 'me':
