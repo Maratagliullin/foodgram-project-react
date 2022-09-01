@@ -1,7 +1,7 @@
 # Проект Продуктовый помошник 
 
-![CI](https://github.com/Maratagliullin/foodgram-project-react/actions/workflows/yamdb_workflow.yaml/badge.svg)
-Проект расположен по адресу http://yandexpracticum.hopto.org/
+![CI](https://github.com/Maratagliullin/foodgram-project-react/actions/workflows/yamdb_workflow.yaml/badge.svg)   
+Проект расположен по адресу http://yandexpracticum.hopto.org/  
 
 Дипломный проект — сайт Foodgram, «Продуктовый помощник». Онлайн-сервис и API для него. На этом сервисе пользователи могут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд. 
 
