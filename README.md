@@ -317,9 +317,10 @@ http://yandexpracticum.hopto.org/admin/login
 Логин: admin@admin.ru  
 Пароль: adminpass  
 
-http://yandexpracticum.hopto.org/signin 
+
+http://yandexpracticum.hopto.org/signin  
 Пользователь:  
-Логин: user@user.ru 
+Логин: user@user.ru  
 Пароль: userpass 
 
 Документация API Foodgram:  
