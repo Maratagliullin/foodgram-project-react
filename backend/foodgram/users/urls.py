@@ -1,15 +1,17 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import (AddSubscribe, ChangePassword, Login, Logout,
-                    SubscriptionViewSet, UsersViewSet)
+from .views import (
+    AddSubscribe, ChangePassword, Login, Logout, SubscriptionViewSet,
+    UserViewSet
+)
 
 app_name = 'users'
 
 router = DefaultRouter()
 router.register('users/subscriptions', SubscriptionViewSet,
                 basename='subscriptions')
-router.register('users', UsersViewSet, basename='users')
+router.register('users', UserViewSet, basename='users')
 
 
 auth_endpoints = [

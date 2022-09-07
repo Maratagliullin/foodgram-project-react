@@ -1,31 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from food.models import Recipe
+from foods.models import Recipe
 
 User = get_user_model()
-
-
-class FavoritedRecipesByUser(models.Model):
-    """Избранные рецепты пользователя"""
-
-    current_user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='user_to_favorited',
-        verbose_name='Текущий пользователь'
-    )
-
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        verbose_name='Рецепт'
-    )
-
-    class Meta:
-        verbose_name = 'Список избранного'
-        verbose_name_plural = 'Список избранного'
-        unique_together = ['current_user', 'recipe']
 
 
 class ShoppingCartByUser(models.Model):
@@ -47,7 +25,12 @@ class ShoppingCartByUser(models.Model):
     class Meta:
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Список покупок'
-        unique_together = ['current_user', 'recipe']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['current_user', 'recipe'],
+                name='unique_current_user_recipe'
+            )
+        ]
 
 
 class SubscribersByCurrentUser(models.Model):
@@ -69,4 +52,9 @@ class SubscribersByCurrentUser(models.Model):
     class Meta:
         verbose_name = 'Подписчики'
         verbose_name_plural = 'Подписчики'
-        unique_together = ['current_user', 'subscription']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['current_user', 'subscription'],
+                name='unique_current_current_user_subscription'
+            )
+        ]

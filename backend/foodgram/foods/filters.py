@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 
-from food.models import Tag
-from users.models import FavoritedRecipesByUser, ShoppingCartByUser
+from foods.models import FavoritedRecipesByUsers, Tag
+from users.models import ShoppingCartByUser
 
 
 class RecipeFilter(filters.FilterSet):
@@ -22,15 +22,15 @@ class RecipeFilter(filters.FilterSet):
         if value:
             if self.request.user.is_authenticated:
                 favorite_recipe_by_users = (
-                    FavoritedRecipesByUser.objects.filter(
+                    FavoritedRecipesByUsers.objects.filter(
                         current_user=self.request.user
                     ).values_list('recipe', flat=True))
                 return queryset.filter(id__in=favorite_recipe_by_users)
-            else:
-                favorite_recipe_by_all_users = (
-                    FavoritedRecipesByUser.objects.all(
-                    ).values_list('recipe', flat=True))
-                return queryset.filter(id__in=favorite_recipe_by_all_users)
+
+            favorite_recipe_by_all_users = (
+                FavoritedRecipesByUsers.objects.all(
+                ).values_list('recipe', flat=True))
+            return queryset.filter(id__in=favorite_recipe_by_all_users)
 
         return queryset
 

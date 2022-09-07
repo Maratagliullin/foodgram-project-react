@@ -5,8 +5,9 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.serializers import ValidationError
 
-from .models import FavoritedRecipesByUser, SubscribersByCurrentUser
-from food.serializers import AddedFavoriteSerializer
+from .models import SubscribersByCurrentUser
+from foods.models import FavoritedRecipesByUsers
+from foods.serializers import AddedFavoriteSerializer
 
 User = get_user_model()
 
@@ -18,10 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
+        fields = (
             'id', 'username', 'email', 'first_name',
             'last_name', 'is_subscribed',
-        ]
+        )
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
@@ -40,7 +41,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     password = serializers.CharField(
-        label=("Password"),
+        label=('Password'),
         style={'input_type': 'password'},
         trim_whitespace=False,
         write_only=True
@@ -48,9 +49,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
+        fields = (
             'id', 'username', 'email', 'first_name', 'last_name', 'password'
-        ]
+        )
 
     def create(self, validated_data):
         validated_data['password'] = make_password(
@@ -76,26 +77,25 @@ class UserSerializerSubscribers(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
+        fields = (
             'id',
             'username',
             'email',
             'first_name',
             'last_name',
             'recipes',
-
-        ]
+        )
 
 
 class MyTokenObtainPairSerializer(serializers.Serializer):
     """Выдача токена авторизации"""
 
     email = serializers.CharField(
-        label=("email"),
+        label=('email'),
         write_only=True
     )
     password = serializers.CharField(
-        label=("Password"),
+        label=('Password'),
         style={'input_type': 'password'},
         trim_whitespace=False,
         write_only=True
@@ -119,11 +119,11 @@ class MyTokenObtainPairSerializer(serializers.Serializer):
         raise ValidationError({'detail': 'email и password обязательные поля'})
 
 
-class FavoritedRecipesByUserSerializer(serializers.ModelSerializer):
+class FavoritedRecipesByUsersSerializer(serializers.ModelSerializer):
     """Избранные рецепты"""
     class Meta:
         fields = ('author', 'recipe')
-        model = FavoritedRecipesByUser
+        model = FavoritedRecipesByUsers
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -140,4 +140,48 @@ class ChangePasswordSerializer(serializers.Serializer):
         if not check_password(current_password, user.password):
             raise ValidationError({'detail': 'Текущий пароль не верен'})
         validate_password(new_password)
+        return attrs
+
+
+class SubscribeUser(serializers.Serializer):
+    """Сериализатор операций связанных с подпиской"""
+
+    def validate(self, attrs):
+        request_user = self.context['request'].user
+        user_by_query_params = self.context['user']
+
+        if request_user == user_by_query_params:
+            raise ValidationError(
+                {"detail": "Подписка на самого себя запрещена"}, code=400)
+
+        is_subscribed = (
+            SubscribersByCurrentUser.objects.filter(
+                current_user=request_user,
+                subscription=user_by_query_params).exists())
+
+        if is_subscribed:
+            raise ValidationError(
+                {'detail': 'Пользователь уже находится в списке подписок'},
+                code=400)
+
+        return attrs
+
+
+class DeleteSubscribeUser(serializers.Serializer):
+    """Сериализатор операций связанных с отпиской"""
+
+    def validate(self, attrs):
+        request_user = self.context['request'].user
+        user_by_query_params = self.context['user']
+
+        is_subscribed = (
+            SubscribersByCurrentUser.objects.filter(
+                current_user=request_user,
+                subscription=user_by_query_params).exists())
+
+        if not is_subscribed:
+            raise ValidationError(
+                {'detail': 'Подписка отсутсвует'},
+                code=400)
+
         return attrs

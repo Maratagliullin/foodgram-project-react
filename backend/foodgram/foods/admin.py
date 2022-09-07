@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from .models import Ingredient, Recipe, RecipeIngredient, Tag, Units
-from users.models import FavoritedRecipesByUser
+from .models import (
+    FavoritedRecipesByUsers, Ingredient, MeasurementUnits, Recipe,
+    RecipeIngredient, Tag
+)
 
 
 class RecipeIngredientInline(admin.TabularInline):
@@ -9,6 +11,7 @@ class RecipeIngredientInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (RecipeIngredientInline,)
 
@@ -18,15 +21,15 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author', 'title', 'tags')
 
     def in_favorites(self, obj):
-        return FavoritedRecipesByUser.objects.filter(recipe=obj).count()
+        return FavoritedRecipesByUsers.objects.filter(recipe=obj).count()
 
     in_favorites.short_description = 'Находится списке избранного (количество)'
 
 
+@admin.register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = (
         'recipe', 'recipe_ingredients', 'recipe_id',)
-    # readonly_fields = ['units']
 
     @admin.display(
         description='Рецепт',
@@ -35,18 +38,13 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
         return obj.recipe.id
 
 
-admin.site.register(Tag)
-
-
+@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    # inlines = (RecipeIngredientInline,)
 
     list_display = (
         'title', 'measurement_unit')
     list_filter = ('title',)
 
 
-admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(Units)
-admin.site.register(RecipeIngredient, RecipeIngredientAdmin)
-admin.site.register(Recipe, RecipeAdmin)
+admin.site.register(Tag)
+admin.site.register(MeasurementUnits)

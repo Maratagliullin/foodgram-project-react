@@ -132,5 +132,4 @@ dmypy.json
 .idea
 media/
 static/
-migrations
 .DS_Store
