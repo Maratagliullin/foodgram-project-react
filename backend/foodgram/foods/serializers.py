@@ -42,7 +42,7 @@ class AddedFavoriteSerializer(serializers.ModelSerializer):
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('id','name', 'slug', 'color')
+        fields = ('id', 'name', 'slug', 'color')
         model = Tag
 
 
