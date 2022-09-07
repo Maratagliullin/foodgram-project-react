@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework.authtoken',
     'colorfield',
-    'django_rename_app'
 ]
 
 MIDDLEWARE = [
