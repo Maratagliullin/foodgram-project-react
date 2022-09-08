@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 from foods.models import (
-    FavoritedRecipesByUsers, Ingredient, Recipe, RecipeIngredient, Tag
+    FavoritedRecipesByUser, Ingredient, Recipe, RecipeIngredient, Tag
 )
 from users.models import ShoppingCartByUser
 
@@ -100,24 +100,15 @@ class RecipeSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if user.is_anonymous:
             return False
-        is_favorited = FavoritedRecipesByUsers.objects.filter(
+        return FavoritedRecipesByUser.objects.filter(
             recipe=obj, current_user=user).exists()
-
-        if is_favorited:
-            return True
-        return False
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context['request'].user
         if user.is_anonymous:
             return False
-
-        in_shopping_cart = ShoppingCartByUser.objects.filter(
+        return ShoppingCartByUser.objects.filter(
             recipe=obj, current_user=user).exists()
-
-        if in_shopping_cart:
-            return True
-        return False
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -179,7 +170,7 @@ class AddFavoriteSerializer(serializers.Serializer):
         recipe = self.context['recipe']
 
         is_favorited = (
-            FavoritedRecipesByUsers.objects.filter(
+            FavoritedRecipesByUser.objects.filter(
                 current_user=request_user,
                 recipe=recipe).exists())
 
@@ -199,7 +190,7 @@ class DeleteFavoriteSerializer(serializers.Serializer):
         recipe = self.context['recipe']
 
         is_favorited = (
-            FavoritedRecipesByUsers.objects.filter(
+            FavoritedRecipesByUser.objects.filter(
                 current_user=request_user,
                 recipe=recipe).exists())
 

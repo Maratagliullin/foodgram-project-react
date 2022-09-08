@@ -21,7 +21,7 @@ class Tag(models.Model):
         return self.name
 
 
-class MeasurementUnits(models.Model):
+class MeasurementUnit(models.Model):
     """Единицы измерения"""
 
     title = models.CharField(verbose_name='Название',
@@ -42,7 +42,7 @@ class Ingredient(models.Model):
 
     title = models.CharField('Название', max_length=500)
     measurement_unit = models.ForeignKey(
-        MeasurementUnits,
+        MeasurementUnit,
         on_delete=models.SET_NULL, null=True,
         related_name='ingredients',
         verbose_name='Единица изменения'
@@ -122,7 +122,7 @@ class RecipeIngredient(models.Model):
         return str(self.recipe)
 
 
-class FavoritedRecipesByUsers(models.Model):
+class FavoritedRecipesByUser(models.Model):
     """Избранные рецепты пользователя"""
 
     current_user = models.ForeignKey(
@@ -147,3 +147,6 @@ class FavoritedRecipesByUsers(models.Model):
                 name='unique_current_current_recipe'
             )
         ]
+
+    def __str__(self):
+        return str(self.recipe)

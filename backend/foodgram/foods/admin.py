@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    FavoritedRecipesByUsers, Ingredient, MeasurementUnits, Recipe,
+    FavoritedRecipesByUser, Ingredient, MeasurementUnit, Recipe,
     RecipeIngredient, Tag
 )
 
@@ -15,21 +15,19 @@ class RecipeIngredientInline(admin.TabularInline):
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (RecipeIngredientInline,)
 
-    list_display = (
-        'title', 'in_favorites', 'author', 'pub_date')
+    list_display = ('title', 'in_favorites', 'author', 'pub_date')
     readonly_fields = ('in_favorites',)
     list_filter = ('author', 'title', 'tags')
 
     def in_favorites(self, obj):
-        return FavoritedRecipesByUsers.objects.filter(recipe=obj).count()
+        return FavoritedRecipesByUser.objects.filter(recipe=obj).count()
 
     in_favorites.short_description = 'Находится списке избранного (количество)'
 
 
 @admin.register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
-    list_display = (
-        'recipe', 'recipe_ingredients', 'recipe_id',)
+    list_display = ('recipe', 'recipe_ingredients', 'recipe_id',)
 
     @admin.display(
         description='Рецепт',
@@ -46,5 +44,17 @@ class IngredientAdmin(admin.ModelAdmin):
     list_filter = ('title',)
 
 
-admin.site.register(Tag)
-admin.site.register(MeasurementUnits)
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'color')
+
+
+@admin.register(MeasurementUnit)
+class MeasurementUnitAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+
+
+@admin.register(FavoritedRecipesByUser)
+class FavoritedRecipesByUsersAdmin(admin.ModelAdmin):
+    list_display = (
+        'current_user', 'recipe')

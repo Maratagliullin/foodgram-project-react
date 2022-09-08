@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
@@ -10,7 +11,7 @@ from rest_framework.views import APIView
 
 from .filters import RecipeFilter
 from .models import (
-    FavoritedRecipesByUsers, Ingredient, MeasurementUnits, Recipe,
+    FavoritedRecipesByUser, Ingredient, MeasurementUnit, Recipe,
     RecipeIngredient, Tag
 )
 from .paginations import CustomPageNumberPagination
@@ -23,6 +24,7 @@ from .serializers import (
     RecipeCreateSerializer, RecipeIngredientSerializer, RecipeSerializer,
     TagSerializer
 )
+from .services import download_shopping_cart
 from users.models import ShoppingCartByUser
 
 User = get_user_model()
@@ -64,7 +66,7 @@ class IngredientViewSet(viewsets.ModelViewSet):
         for field in serializer.validated_data:
             title = field['title']
             measurement_unit_obg, create = (
-                MeasurementUnits.objects.get_or_create(
+                MeasurementUnit.objects.get_or_create(
                     title=field['measurement_unit']))
             ingredient_list.append(Ingredient(
                 title=title, measurement_unit=measurement_unit_obg))
@@ -97,7 +99,7 @@ class AddFavorite(APIView):
         serializer.is_valid(raise_exception=True)
 
         add_favorite = (
-            FavoritedRecipesByUsers(
+            FavoritedRecipesByUser(
                 current_user=self.request.user, recipe=recipe))
         add_favorite.save()
 
@@ -112,7 +114,7 @@ class AddFavorite(APIView):
             data={}, context={'request': request, 'recipe': recipe})
         serializer.is_valid(raise_exception=True)
 
-        del_to_favorite = FavoritedRecipesByUsers.objects.filter(
+        del_to_favorite = FavoritedRecipesByUser.objects.filter(
             current_user=self.request.user, recipe=recipe)
         del_to_favorite.delete()
 
@@ -261,3 +263,13 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
     pagination_class = None
+
+
+class DownloadShoppingCart(APIView):
+    """Выгрузка списка покупок"""
+
+    def get(self, request, format=None):
+        result_string = download_shopping_cart(request)
+        return HttpResponse(result_string,
+                            content_type='text/plain',
+                            status=status.HTTP_200_OK)
