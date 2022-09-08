@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    FavoritedRecipesByUser, Ingredient, MeasurementUnit, Recipe,
+    FavoritedRecipeByUser, Ingredient, MeasurementUnit, Recipe,
     RecipeIngredient, Tag
 )
 
@@ -20,7 +20,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author', 'title', 'tags')
 
     def in_favorites(self, obj):
-        return FavoritedRecipesByUser.objects.filter(recipe=obj).count()
+        return FavoritedRecipeByUser.objects.filter(recipe=obj).count()
 
     in_favorites.short_description = 'Находится списке избранного (количество)'
 
@@ -54,7 +54,7 @@ class MeasurementUnitAdmin(admin.ModelAdmin):
     list_display = ('title',)
 
 
-@admin.register(FavoritedRecipesByUser)
-class FavoritedRecipesByUsersAdmin(admin.ModelAdmin):
+@admin.register(FavoritedRecipeByUser)
+class FavoritedRecipeByUsersAdmin(admin.ModelAdmin):
     list_display = (
         'current_user', 'recipe')

@@ -122,7 +122,7 @@ class RecipeIngredient(models.Model):
         return str(self.recipe)
 
 
-class FavoritedRecipesByUser(models.Model):
+class FavoritedRecipeByUser(models.Model):
     """Избранные рецепты пользователя"""
 
     current_user = models.ForeignKey(

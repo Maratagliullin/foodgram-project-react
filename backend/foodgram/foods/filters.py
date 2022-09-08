@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from foods.models import FavoritedRecipesByUser, Tag
+from foods.models import FavoritedRecipeByUser, Tag
 from users.models import ShoppingCartByUser
 
 
@@ -20,7 +20,7 @@ class RecipeFilter(filters.FilterSet):
         которые находятся в избранном.
         """
         if value:
-            favorited_recipes = FavoritedRecipesByUser.objects.all()
+            favorited_recipes = FavoritedRecipeByUser.objects.all()
             if self.request.user.is_authenticated:
                 favorite_recipe_by_users = (
                     favorited_recipes.filter(

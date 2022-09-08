@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.serializers import ValidationError
 
 from .models import SubscribersByCurrentUser
-from foods.models import FavoritedRecipesByUser
+from foods.models import FavoritedRecipeByUser
 from foods.serializers import AddedFavoriteSerializer
 
 User = get_user_model()
@@ -123,7 +123,7 @@ class FavoritedRecipesByUsersSerializer(serializers.ModelSerializer):
     """Избранные рецепты"""
     class Meta:
         fields = ('author', 'recipe')
-        model = FavoritedRecipesByUser
+        model = FavoritedRecipeByUser
 
 
 class ChangePasswordSerializer(serializers.Serializer):

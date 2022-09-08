@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 
 from .filters import RecipeFilter
 from .models import (
-    FavoritedRecipesByUser, Ingredient, MeasurementUnit, Recipe,
+    FavoritedRecipeByUser, Ingredient, MeasurementUnit, Recipe,
     RecipeIngredient, Tag
 )
 from .paginations import CustomPageNumberPagination
@@ -99,7 +99,7 @@ class AddFavorite(APIView):
         serializer.is_valid(raise_exception=True)
 
         add_favorite = (
-            FavoritedRecipesByUser(
+            FavoritedRecipeByUser(
                 current_user=self.request.user, recipe=recipe))
         add_favorite.save()
 
@@ -114,7 +114,7 @@ class AddFavorite(APIView):
             data={}, context={'request': request, 'recipe': recipe})
         serializer.is_valid(raise_exception=True)
 
-        del_to_favorite = FavoritedRecipesByUser.objects.filter(
+        del_to_favorite = FavoritedRecipeByUser.objects.filter(
             current_user=self.request.user, recipe=recipe)
         del_to_favorite.delete()
 
