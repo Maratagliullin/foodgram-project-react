@@ -331,11 +331,11 @@ Docker version 20.10.14, build a224086, build f0df350 - версия докер 
 http://yandexpracticum.hopto.org/admin
 
 **Учетные данные:**.    
-Django Admin
-http://yandexpracticum.hopto.org/admin/login  
+Django Admin   
+http://yandexpracticum.hopto.org/admin/login     
 Администратор:   
-Логин: administrator 
-Пароль: adminpass  
+Логин: administrator   
+Пароль: adminpass.   
 
 http://yandexpracticum.hopto.org/signin  
 Пользователь:  
