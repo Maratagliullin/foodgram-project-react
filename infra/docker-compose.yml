@@ -2,9 +2,7 @@ version: '3.8'
 services:
   
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: maratagliullin/foodgram_frontend:v1
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
@@ -17,8 +15,6 @@ services:
       - ../backend/foodgram:/app
       - static_value:/app/static/
       - media_value:/app/media/
-    ports:
-      - "8000:8000"
     env_file:
       - ./.env
     depends_on:
