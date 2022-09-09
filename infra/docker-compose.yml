@@ -12,7 +12,6 @@ services:
     image: maratagliullin/foodgram:v1
     restart: always
     volumes:
-      - ../backend/foodgram:/app
       - static_value:/app/static/
       - media_value:/app/media/
     env_file:
