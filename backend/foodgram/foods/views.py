@@ -269,7 +269,7 @@ class DownloadShoppingCart(APIView):
     """Выгрузка списка покупок"""
 
     def get(self, request, format=None):
-        result_string = download_shopping_cart(request)
+        result_string = download_shopping_cart(request.user)
         return HttpResponse(result_string,
                             content_type='text/plain',
                             status=status.HTTP_200_OK)

@@ -1,10 +1,9 @@
 from django.db.models import Sum
 
 
-def download_shopping_cart(request):
-
+def download_shopping_cart(user):
     all_recipe_in_shopping_cart = (
-        request.user.user_to_shopping_cart.values(
+        user.user_to_shopping_cart.values(
             'recipe__ingredient__title',
             'recipe__ingredient__measurement_unit__title',
             'recipe__recipeingredient__amount'))

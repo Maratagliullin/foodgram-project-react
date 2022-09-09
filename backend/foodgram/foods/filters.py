@@ -43,15 +43,16 @@ class RecipeFilter(filters.FilterSet):
         которые находятся в списке покупок.
         """
         if value:
+            shopping_cart_by_user = ShoppingCartByUser.objects.all()
             if self.request.user.is_authenticated:
-                favorite_recipe_by_users = ShoppingCartByUser.objects.filter(
+                favorite_recipe_by_users = shopping_cart_by_user.filter(
                     current_user=self.request.user
                 ).values_list('recipe', flat=True)
                 return queryset.filter(id__in=favorite_recipe_by_users)
-            else:
-                favorite_recipe_by_all_users = ShoppingCartByUser.objects.all(
-                ).values_list('recipe', flat=True)
-                return queryset.filter(id__in=favorite_recipe_by_all_users)
+
+            favorite_recipe_by_all_users = shopping_cart_by_user.values_list(
+                'recipe', flat=True)
+            return queryset.filter(id__in=favorite_recipe_by_all_users)
 
         return queryset
 
