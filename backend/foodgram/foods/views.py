@@ -56,7 +56,7 @@ class IngredientViewSet(viewsets.ModelViewSet):
         queryset = Ingredient.objects.all()
         name = self.request.query_params.get('name')
         if name is not None:
-            return queryset.filter(title=name.lower())
+            return queryset.filter(title__contains=name.lower())
         return queryset
 
     def create(self, request):
